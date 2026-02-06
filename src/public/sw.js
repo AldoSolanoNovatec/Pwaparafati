@@ -1,8 +1,8 @@
 const CACHE_NAME = 'fati-pwa-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json'
+  './',
+  './index.html',
+  './manifest.json'
 ];
 
 // Install service worker
@@ -10,12 +10,15 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        return cache.addAll(urlsToCache);
+        return cache.addAll(urlsToCache).catch(err => {
+          console.log('Error caching files:', err);
+        });
       })
   );
+  self.skipWaiting();
 });
 
-// Fetch from cache
+// Fetch from cache with network fallback
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request)
@@ -24,9 +27,29 @@ self.addEventListener('fetch', (event) => {
         if (response) {
           return response;
         }
-        return fetch(event.request);
-      }
-    )
+        
+        // Clone the request
+        const fetchRequest = event.request.clone();
+        
+        return fetch(fetchRequest).then((response) => {
+          // Check if valid response
+          if (!response || response.status !== 200 || response.type !== 'basic') {
+            return response;
+          }
+          
+          // Clone the response
+          const responseToCache = response.clone();
+          
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
+          
+          return response;
+        }).catch(() => {
+          // Fallback for offline
+          return new Response('Offline - contenido no disponible');
+        });
+      })
   );
 });
 
@@ -44,4 +67,5 @@ self.addEventListener('activate', (event) => {
       );
     })
   );
+  return self.clients.claim();
 });
