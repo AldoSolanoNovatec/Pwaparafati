@@ -1,15 +1,1021 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#FFB5E8">
+    <title>Para Fati 🌷</title>
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiUGFyYSBGYXRpIPCfjLciLCJzaG9ydF9uYW1lIjoiRmF0aSDwn4y3IiwidGhlbWVfY29sb3IiOiIjRkZCNUU4IiwiYmFja2dyb3VuZF9jb2xvciI6IiNGRkY1RjgiLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsInN0YXJ0X3VybCI6Ii4vIiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbCwlM0Nzdmcgd2lkdGg9JzE5MicgaGVpZ2h0PScxOTInIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyclM0UlM0NyZWN0IHdpZHRoPScxOTInIGhlaWdodD0nMTkyJyBmaWxsPSclMjNGRkI1RTgnLyUzRSUzQ3RleHQgeD0nNTAlMjUnIHk9JzUwJTI1JyBmb250LXNpemU9JzgwJyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBkb21pbmFudC1iYXNlbGluZT0nY2VudHJhbCclM0Xwn4y3JTNDJTJGdGV4dCUzRSUzQyUyRnN2ZyUzRSIsInNpemVzIjoiMTkyeDE5MiIsInR5cGUiOiJpbWFnZS9zdmcreG1sIn1dfQ==">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  <!DOCTYPE html>
-  <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>PWA para Fati</title>
-    </head>
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: linear-gradient(135deg, #FFF5F8 0%, #E0BBE4 50%, #B4E1FF 100%);
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
 
-    <body>
-      <div id="root"></div>
-      <script type="module" src="/src/main.tsx"></script>
-    </body>
-  </html>
-  
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(255, 181, 232, 0.3);
+        }
+
+        h1 {
+            color: #D8578F;
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            color: #8B7BA8;
+            font-style: italic;
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+
+        .magic-quote {
+            background: linear-gradient(135deg, #FFB5E8, #B4E1FF);
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 30px 0;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .magic-quote p {
+            font-size: 1.5em;
+            color: white;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            letter-spacing: 1px;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(255, 181, 232, 0.4);
+        }
+
+        .card-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            color: #D8578F;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .card p {
+            color: #8B7BA8;
+            line-height: 1.6;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal.show {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 25px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #FFB5E8;
+        }
+
+        .modal-header h2 {
+            color: #D8578F;
+            font-size: 1.8em;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 2em;
+            color: #8B7BA8;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .close-btn:hover {
+            transform: scale(1.2);
+            color: #D8578F;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            color: #8B7BA8;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #FFB5E8;
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus,
+        .input-group textarea:focus {
+            outline: none;
+            border-color: #D8578F;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #FFB5E8, #D8578F);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1em;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(216, 87, 143, 0.3);
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 25px rgba(216, 87, 143, 0.5);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #B4E1FF, #8B7BA8);
+        }
+
+        .item-list {
+            margin-top: 20px;
+        }
+
+        .item {
+            background: linear-gradient(135deg, #FFF5F8, #E0BBE4);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-info h4 {
+            color: #D8578F;
+            margin-bottom: 5px;
+        }
+
+        .item-info p {
+            color: #8B7BA8;
+            font-size: 0.9em;
+            margin: 2px 0;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 0.9em;
+        }
+
+        .btn-delete {
+            background: linear-gradient(135deg, #FF6B9D, #C9184A);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #8B7BA8;
+            font-style: italic;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #FFF5F8, #E0BBE4);
+            border-radius: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            color: #D8578F;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: #8B7BA8;
+            font-size: 0.9em;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #FFB5E8;
+            border-radius: 20px;
+            color: #8B7BA8;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-tab.active {
+            background: linear-gradient(135deg, #FFB5E8, #D8578F);
+            color: white;
+            border-color: #D8578F;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+            
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌷 Para Fati 🌷</h1>
+            <p class="subtitle">Tu espacio personal y mágico</p>
+        </div>
+
+        <div class="magic-quote">
+            <p>✨ "Call it magic, call it true" ✨</p>
+            <p style="font-size: 0.8em; margin-top: 10px;">- Coldplay, Magic</p>
+        </div>
+
+        <div class="cards-container">
+            <div class="card" onclick="openModal('flowers')">
+                <div class="card-icon">🌷</div>
+                <h3>Tulipanes y Flores</h3>
+                <p>Un jardín de mensajes especiales</p>
+            </div>
+
+            <div class="card" onclick="openModal('activities')">
+                <div class="card-icon">🏊‍♀️</div>
+                <h3>Actividades Físicas</h3>
+                <p>Registra tus entrenamientos y natación</p>
+            </div>
+
+            <div class="card" onclick="openModal('entertainment')">
+                <div class="card-icon">🎬</div>
+                <h3>Series y Películas</h3>
+                <p>Tu lista de vistas y por ver</p>
+            </div>
+
+            <div class="card" onclick="openModal('music')">
+                <div class="card-icon">🎵</div>
+                <h3>Música y Conciertos</h3>
+                <p>Canciones favoritas y conciertos</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Flores -->
+    <div id="flowersModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🌷 Jardín de Flores</h2>
+                <button class="close-btn" onclick="closeModal('flowers')">&times;</button>
+            </div>
+            
+            <div class="message-boxes">
+                <div class="item">
+                    <div class="item-info">
+                        <h4>🌷 Tulipán</h4>
+                        <p>Los tulipanes representan el amor perfecto, y eso es lo que siento por ti cada día.</p>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="item-info">
+                        <h4>🌸 Flor de Cerezo</h4>
+                        <p>Cada momento contigo es efímero pero hermoso, y por eso lo valoro infinitamente.</p>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="item-info">
+                        <h4>🌺 Hibisco</h4>
+                        <p>Con tu dulzura haces todo más especial.</p>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="item-info">
+                        <h4>🌹 Rosa</h4>
+                        <p>Una rosa por cada razón por la que te amo. Necesitaría un jardín entero.</p>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="item-info">
+                        <h4>🌻 Girasol</h4>
+                        <p>Como el girasol sigue al sol, yo sigo tu luz cada día.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Actividades -->
+    <div id="activitiesModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🏊‍♀️ Mis Actividades</h2>
+                <button class="close-btn" onclick="closeModal('activities')">&times;</button>
+            </div>
+
+            <div class="stats" id="activityStats">
+                <div class="stat-item">
+                    <div class="stat-number" id="totalActivities">0</div>
+                    <div class="stat-label">Actividades</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="thisWeek">0</div>
+                    <div class="stat-label">Esta Semana</div>
+                </div>
+            </div>
+
+            <button class="btn" onclick="showAddActivity()">➕ Agregar Actividad</button>
+
+            <div id="addActivityForm" style="display: none; margin-top: 20px;">
+                <div class="input-group">
+                    <label>Tipo de Actividad</label>
+                    <select id="activityType">
+                        <option value="natacion">🏊‍♀️ Natación</option>
+                        <option value="gym">💪 Gym</option>
+                        <option value="yoga">🧘‍♀️ Yoga</option>
+                        <option value="correr">🏃‍♀️ Correr</option>
+                        <option value="otro">🏋️‍♀️ Otro</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Duración (minutos)</label>
+                    <input type="number" id="activityDuration" placeholder="30">
+                </div>
+                <div class="input-group">
+                    <label>Fecha</label>
+                    <input type="date" id="activityDate">
+                </div>
+                <div class="input-group">
+                    <label>Notas (opcional)</label>
+                    <textarea id="activityNotes" rows="3" placeholder="¿Cómo te sentiste?"></textarea>
+                </div>
+                <button class="btn" onclick="addActivity()">Guardar Actividad</button>
+                <button class="btn btn-secondary" onclick="hideAddActivity()">Cancelar</button>
+            </div>
+
+            <div id="activitiesList" class="item-list"></div>
+        </div>
+    </div>
+
+    <!-- Modal Entretenimiento -->
+    <div id="entertainmentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🎬 Series y Películas</h2>
+                <button class="close-btn" onclick="closeModal('entertainment')">&times;</button>
+            </div>
+
+            <div class="filter-tabs">
+                <div class="filter-tab active" onclick="filterEntertainment('all')">Todas</div>
+                <div class="filter-tab" onclick="filterEntertainment('vistas')">✅ Vistas</div>
+                <div class="filter-tab" onclick="filterEntertainment('por-ver')">📋 Por Ver</div>
+            </div>
+
+            <button class="btn" onclick="showAddEntertainment()">➕ Agregar Serie/Película</button>
+
+            <div id="addEntertainmentForm" style="display: none; margin-top: 20px;">
+                <div class="input-group">
+                    <label>Título</label>
+                    <input type="text" id="entertainmentTitle" placeholder="Stranger Things">
+                </div>
+                <div class="input-group">
+                    <label>Tipo</label>
+                    <select id="entertainmentType">
+                        <option value="serie">📺 Serie</option>
+                        <option value="pelicula">🎬 Película</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Estado</label>
+                    <select id="entertainmentStatus">
+                        <option value="vistas">✅ Ya la vi</option>
+                        <option value="por-ver">📋 Quiero verla</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Calificación (opcional, solo si ya la viste)</label>
+                    <select id="entertainmentRating">
+                        <option value="">Sin calificar</option>
+                        <option value="5">⭐⭐⭐⭐⭐</option>
+                        <option value="4">⭐⭐⭐⭐</option>
+                        <option value="3">⭐⭐⭐</option>
+                        <option value="2">⭐⭐</option>
+                        <option value="1">⭐</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Notas (opcional)</label>
+                    <textarea id="entertainmentNotes" rows="3" placeholder="¿Qué te pareció?"></textarea>
+                </div>
+                <button class="btn" onclick="addEntertainment()">Guardar</button>
+                <button class="btn btn-secondary" onclick="hideAddEntertainment()">Cancelar</button>
+            </div>
+
+            <div id="entertainmentList" class="item-list"></div>
+        </div>
+    </div>
+
+    <!-- Modal Música -->
+    <div id="musicModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🎵 Música y Conciertos</h2>
+                <button class="close-btn" onclick="closeModal('music')">&times;</button>
+            </div>
+
+            <div class="filter-tabs">
+                <div class="filter-tab active" onclick="filterMusic('all')">Todo</div>
+                <div class="filter-tab" onclick="filterMusic('cancion')">🎵 Canciones</div>
+                <div class="filter-tab" onclick="filterMusic('concierto')">🎸 Conciertos</div>
+            </div>
+
+            <button class="btn" onclick="showAddMusic()">➕ Agregar Canción/Concierto</button>
+
+            <div id="addMusicForm" style="display: none; margin-top: 20px;">
+                <div class="input-group">
+                    <label>Tipo</label>
+                    <select id="musicType" onchange="toggleConcertFields()">
+                        <option value="cancion">🎵 Canción Favorita</option>
+                        <option value="concierto">🎸 Concierto</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Artista</label>
+                    <input type="text" id="musicArtist" placeholder="Coldplay, Rels B...">
+                </div>
+                <div class="input-group" id="songNameGroup">
+                    <label>Nombre de la Canción</label>
+                    <input type="text" id="musicSong" placeholder="Magic">
+                </div>
+                <div class="input-group" id="concertDateGroup" style="display: none;">
+                    <label>Fecha del Concierto</label>
+                    <input type="date" id="concertDate">
+                </div>
+                <div class="input-group" id="concertStatusGroup" style="display: none;">
+                    <label>Estado</label>
+                    <select id="concertStatus">
+                        <option value="asistido">✅ Ya fui</option>
+                        <option value="proximo">📅 Próximo</option>
+                        <option value="deseado">💭 Me gustaría ir</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Notas (opcional)</label>
+                    <textarea id="musicNotes" rows="3" placeholder="¿Por qué te gusta? ¿Qué te hace sentir?"></textarea>
+                </div>
+                <button class="btn" onclick="addMusic()">Guardar</button>
+                <button class="btn btn-secondary" onclick="hideAddMusic()">Cancelar</button>
+            </div>
+
+            <div id="musicList" class="item-list"></div>
+        </div>
+    </div>
+
+    <script>
+        // Data Storage
+        let activities = JSON.parse(localStorage.getItem('fati_activities') || '[]');
+        let entertainment = JSON.parse(localStorage.getItem('fati_entertainment') || '[]');
+        let music = JSON.parse(localStorage.getItem('fati_music') || '[]');
+        let currentEntertainmentFilter = 'all';
+        let currentMusicFilter = 'all';
+
+        // Modal Functions
+        function openModal(type) {
+            document.getElementById(type + 'Modal').classList.add('show');
+            if (type === 'activities') {
+                loadActivities();
+                updateActivityStats();
+            } else if (type === 'entertainment') {
+                loadEntertainment();
+            } else if (type === 'music') {
+                loadMusic();
+            }
+        }
+
+        function closeModal(type) {
+            document.getElementById(type + 'Modal').classList.remove('show');
+        }
+
+        // Activities Functions
+        function showAddActivity() {
+            document.getElementById('addActivityForm').style.display = 'block';
+            document.getElementById('activityDate').valueAsDate = new Date();
+        }
+
+        function hideAddActivity() {
+            document.getElementById('addActivityForm').style.display = 'none';
+            clearActivityForm();
+        }
+
+        function clearActivityForm() {
+            document.getElementById('activityType').value = 'natacion';
+            document.getElementById('activityDuration').value = '';
+            document.getElementById('activityDate').valueAsDate = new Date();
+            document.getElementById('activityNotes').value = '';
+        }
+
+        function addActivity() {
+            const type = document.getElementById('activityType').value;
+            const duration = document.getElementById('activityDuration').value;
+            const date = document.getElementById('activityDate').value;
+            const notes = document.getElementById('activityNotes').value;
+
+            if (!duration || !date) {
+                alert('Por favor completa los campos obligatorios');
+                return;
+            }
+
+            const activity = {
+                id: Date.now(),
+                type,
+                duration: parseInt(duration),
+                date,
+                notes,
+                createdAt: new Date().toISOString()
+            };
+
+            activities.unshift(activity);
+            localStorage.setItem('fati_activities', JSON.stringify(activities));
+            
+            hideAddActivity();
+            loadActivities();
+            updateActivityStats();
+        }
+
+        function deleteActivity(id) {
+            if (confirm('¿Eliminar esta actividad?')) {
+                activities = activities.filter(a => a.id !== id);
+                localStorage.setItem('fati_activities', JSON.stringify(activities));
+                loadActivities();
+                updateActivityStats();
+            }
+        }
+
+        function loadActivities() {
+            const list = document.getElementById('activitiesList');
+            
+            if (activities.length === 0) {
+                list.innerHTML = '<div class="empty-state">No hay actividades registradas. ¡Agrega tu primera actividad! 💪</div>';
+                return;
+            }
+
+            const icons = {
+                natacion: '🏊‍♀️',
+                gym: '💪',
+                yoga: '🧘‍♀️',
+                correr: '🏃‍♀️',
+                otro: '🏋️‍♀️'
+            };
+
+            const names = {
+                natacion: 'Natación',
+                gym: 'Gym',
+                yoga: 'Yoga',
+                correr: 'Correr',
+                otro: 'Otro'
+            };
+
+            list.innerHTML = activities.map(activity => `
+                <div class="item">
+                    <div class="item-info">
+                        <h4>${icons[activity.type]} ${names[activity.type]}</h4>
+                        <p>⏱️ ${activity.duration} minutos</p>
+                        <p>📅 ${new Date(activity.date).toLocaleDateString('es-ES')}</p>
+                        ${activity.notes ? `<p>💭 ${activity.notes}</p>` : ''}
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-small btn-delete" onclick="deleteActivity(${activity.id})">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateActivityStats() {
+            const total = activities.length;
+            const today = new Date();
+            const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+            
+            const thisWeek = activities.filter(a => {
+                const actDate = new Date(a.date);
+                return actDate >= weekAgo && actDate <= today;
+            }).length;
+
+            document.getElementById('totalActivities').textContent = total;
+            document.getElementById('thisWeek').textContent = thisWeek;
+        }
+
+        // Entertainment Functions
+        function showAddEntertainment() {
+            document.getElementById('addEntertainmentForm').style.display = 'block';
+        }
+
+        function hideAddEntertainment() {
+            document.getElementById('addEntertainmentForm').style.display = 'none';
+            clearEntertainmentForm();
+        }
+
+        function clearEntertainmentForm() {
+            document.getElementById('entertainmentTitle').value = '';
+            document.getElementById('entertainmentType').value = 'serie';
+            document.getElementById('entertainmentStatus').value = 'vistas';
+            document.getElementById('entertainmentRating').value = '';
+            document.getElementById('entertainmentNotes').value = '';
+        }
+
+        function filterEntertainment(filter) {
+            currentEntertainmentFilter = filter;
+            document.querySelectorAll('#entertainmentModal .filter-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            loadEntertainment();
+        }
+
+        function addEntertainment() {
+            const title = document.getElementById('entertainmentTitle').value.trim();
+            const type = document.getElementById('entertainmentType').value;
+            const status = document.getElementById('entertainmentStatus').value;
+            const rating = document.getElementById('entertainmentRating').value;
+            const notes = document.getElementById('entertainmentNotes').value;
+
+            if (!title) {
+                alert('Por favor ingresa el título');
+                return;
+            }
+
+            const item = {
+                id: Date.now(),
+                title,
+                type,
+                status,
+                rating: rating ? parseInt(rating) : null,
+                notes,
+                createdAt: new Date().toISOString()
+            };
+
+            entertainment.unshift(item);
+            localStorage.setItem('fati_entertainment', JSON.stringify(entertainment));
+            
+            hideAddEntertainment();
+            loadEntertainment();
+        }
+
+        function deleteEntertainment(id) {
+            if (confirm('¿Eliminar este elemento?')) {
+                entertainment = entertainment.filter(e => e.id !== id);
+                localStorage.setItem('fati_entertainment', JSON.stringify(entertainment));
+                loadEntertainment();
+            }
+        }
+
+        function loadEntertainment() {
+            const list = document.getElementById('entertainmentList');
+            
+            let filtered = entertainment;
+            if (currentEntertainmentFilter !== 'all') {
+                filtered = entertainment.filter(e => e.status === currentEntertainmentFilter);
+            }
+
+            if (filtered.length === 0) {
+                list.innerHTML = '<div class="empty-state">No hay elementos en esta categoría. ¡Agrega uno! 🎬</div>';
+                return;
+            }
+
+            const typeIcons = {
+                serie: '📺',
+                pelicula: '🎬'
+            };
+
+            const statusNames = {
+                'vistas': '✅ Vista',
+                'por-ver': '📋 Por Ver'
+            };
+
+            list.innerHTML = filtered.map(item => `
+                <div class="item">
+                    <div class="item-info">
+                        <h4>${typeIcons[item.type]} ${item.title}</h4>
+                        <p>${statusNames[item.status]}</p>
+                        ${item.rating ? `<p>${'⭐'.repeat(item.rating)}</p>` : ''}
+                        ${item.notes ? `<p>💭 ${item.notes}</p>` : ''}
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-small btn-delete" onclick="deleteEntertainment(${item.id})">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Music Functions
+        function showAddMusic() {
+            document.getElementById('addMusicForm').style.display = 'block';
+        }
+
+        function hideAddMusic() {
+            document.getElementById('addMusicForm').style.display = 'none';
+            clearMusicForm();
+        }
+
+        function clearMusicForm() {
+            document.getElementById('musicType').value = 'cancion';
+            document.getElementById('musicArtist').value = '';
+            document.getElementById('musicSong').value = '';
+            document.getElementById('concertDate').value = '';
+            document.getElementById('concertStatus').value = 'asistido';
+            document.getElementById('musicNotes').value = '';
+            toggleConcertFields();
+        }
+
+        function toggleConcertFields() {
+            const type = document.getElementById('musicType').value;
+            const isConcert = type === 'concierto';
+            
+            document.getElementById('songNameGroup').style.display = isConcert ? 'none' : 'block';
+            document.getElementById('concertDateGroup').style.display = isConcert ? 'block' : 'none';
+            document.getElementById('concertStatusGroup').style.display = isConcert ? 'block' : 'none';
+        }
+
+        function filterMusic(filter) {
+            currentMusicFilter = filter;
+            document.querySelectorAll('#musicModal .filter-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            loadMusic();
+        }
+
+        function addMusic() {
+            const type = document.getElementById('musicType').value;
+            const artist = document.getElementById('musicArtist').value.trim();
+            const notes = document.getElementById('musicNotes').value;
+
+            if (!artist) {
+                alert('Por favor ingresa el artista');
+                return;
+            }
+
+            let item = {
+                id: Date.now(),
+                type,
+                artist,
+                notes,
+                createdAt: new Date().toISOString()
+            };
+
+            if (type === 'cancion') {
+                const song = document.getElementById('musicSong').value.trim();
+                if (!song) {
+                    alert('Por favor ingresa el nombre de la canción');
+                    return;
+                }
+                item.song = song;
+            } else {
+                const date = document.getElementById('concertDate').value;
+                const status = document.getElementById('concertStatus').value;
+                item.date = date;
+                item.status = status;
+            }
+
+            music.unshift(item);
+            localStorage.setItem('fati_music', JSON.stringify(music));
+            
+            hideAddMusic();
+            loadMusic();
+        }
+
+        function deleteMusic(id) {
+            if (confirm('¿Eliminar este elemento?')) {
+                music = music.filter(m => m.id !== id);
+                localStorage.setItem('fati_music', JSON.stringify(music));
+                loadMusic();
+            }
+        }
+
+        function loadMusic() {
+            const list = document.getElementById('musicList');
+            
+            let filtered = music;
+            if (currentMusicFilter !== 'all') {
+                filtered = music.filter(m => m.type === currentMusicFilter);
+            }
+
+            if (filtered.length === 0) {
+                list.innerHTML = '<div class="empty-state">No hay elementos en esta categoría. ¡Agrega uno! 🎵</div>';
+                return;
+            }
+
+            const statusNames = {
+                'asistido': '✅ Asistido',
+                'proximo': '📅 Próximo',
+                'deseado': '💭 Me gustaría ir'
+            };
+
+            list.innerHTML = filtered.map(item => `
+                <div class="item">
+                    <div class="item-info">
+                        <h4>${item.type === 'cancion' ? '🎵' : '🎸'} ${item.artist}${item.song ? ' - ' + item.song : ''}</h4>
+                        ${item.date ? `<p>📅 ${new Date(item.date).toLocaleDateString('es-ES')}</p>` : ''}
+                        ${item.status ? `<p>${statusNames[item.status]}</p>` : ''}
+                        ${item.notes ? `<p>💭 ${item.notes}</p>` : ''}
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-small btn-delete" onclick="deleteMusic(${item.id})">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('show');
+            }
+        }
+
+        // Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                const swCode = `
+                    self.addEventListener('install', (e) => {
+                        self.skipWaiting();
+                    });
+                    
+                    self.addEventListener('activate', (e) => {
+                        self.clients.claim();
+                    });
+                    
+                    self.addEventListener('fetch', (e) => {
+                        e.respondWith(
+                            fetch(e.request).catch(() => {
+                                return new Response('Offline');
+                            })
+                        );
+                    });
+                `;
+                
+                const blob = new Blob([swCode], { type: 'application/javascript' });
+                const swUrl = URL.createObjectURL(blob);
+                
+                navigator.serviceWorker.register(swUrl);
+            });
+        }
+
+        // Initialize with sample data for Fati
+        if (entertainment.length === 0) {
+            entertainment = [
+                {
+                    id: Date.now(),
+                    title: 'Stranger Things',
+                    type: 'serie',
+                    status: 'vistas',
+                    rating: 5,
+                    notes: '¡Me encanta el Upside Down!',
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: Date.now() + 1,
+                    title: 'Alicia en el País de las Maravillas',
+                    type: 'pelicula',
+                    status: 'vistas',
+                    rating: 5,
+                    notes: 'Una aventura mágica y maravillosa',
+                    createdAt: new Date().toISOString()
+                }
+            ];
+            localStorage.setItem('fati_entertainment', JSON.stringify(entertainment));
+        }
+
+        if (music.length === 0) {
+            music = [
+                {
+                    id: Date.now(),
+                    type: 'cancion',
+                    artist: 'Coldplay',
+                    song: 'Magic',
+                    notes: 'Call it magic, call it true ✨',
+                    createdAt: new Date().toISOString()
+                }
+            ];
+            localStorage.setItem('fati_music', JSON.stringify(music));
+        }
+    </script>
+</body>
+</html>
